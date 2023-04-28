@@ -1,12 +1,12 @@
+import Section from './pages/Section'
+import Home from './pages/Home';
 
-
-function App() {
-
+const App = () => {
   return (
     <div>
-      oi
+      <Home />
     </div>
   )
 }
 
-export default App
+export default App;
