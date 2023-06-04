@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react"
-
+import { Container, Input, BtnAddTodo, AddNewTodo, ListTodo, ListItemTodo } from './styles'
+import { FaTrash } from 'react-icons/fa';
+import { AiOutlineCheck } from "react-icons/ai";
 
 interface Todo {
   id: number;
@@ -10,7 +12,7 @@ interface Todo {
 function Home() {
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const tituloRef = useRef<HTMLInputElement>(null);
+  
 
 
   //clique => handleTodo => AddTodo
@@ -38,36 +40,49 @@ function Home() {
     tituloRef.current!.value = ''
   }
 
-  function handleDeleteTodo(item: Todo) {
-    setTodos(todos.filter(todo => todo.id !== item.id)) //criar um novo 
+  function deleteTodo(todo: Todo) {
+    setTodos(todos.filter(item => item.id !== todo.id))
   }
 
-  function handleEditTodo(item: Todo) {
-    console.log(item.id);
-
+  function handleDeleteTodo(todo: Todo) {
+    deleteTodo(todo)
   }
 
-  function handleToggleCompleted(item: Todo) {
-    item.completed == true ? item.completed = false : item.completed = true
+  function updateTodo(todo: Todo) {
+    setTodos(todos.map(item => item.id === todo.id ? todo : item))
   }
 
-  console.log(todos);
+  function handleToggleCompleted(todo: Todo) {
+    const newTodo = {...todo, completed: !todo.completed}
+    updateTodo(newTodo)
+  }
+
+  //TodoApp 
+  //  FormTodo
+  //  ListTodo
+  //    ListItemTodo
+  //criar um arquivo chamado button e dentro dele export function deleteBxutton, updateButton, addButton
+
   return (
-    <div>
+    <Container>
       <h1>Todo List Project</h1>
-      <input ref={tituloRef} type='text' id="inputText" placeholder='Insira a nova tarefa' />
-      <button onClick={handleAddTodo}>+</button>
-      <ul>
+      <AddNewTodo>
+        <Input ref={tituloRef} type='text' id="inputText" placeholder='Insira a nova tarefa' />
+        <BtnAddTodo onClick={handleAddTodo}>+</BtnAddTodo>
+      </AddNewTodo>
+      <ListTodo>
         {todos.map((item) =>
-          <li key={item.id}>
-            <button onClick={() => handleToggleCompleted(item)}>OK!</button>
+          <ListItemTodo key={item.id} isCompleted={item.completed}>
             {item.title}
-            <button onClick={() => handleEditTodo(item)}>EDIT</button>
-            <button onClick={() => handleDeleteTodo(item)}>DELETE</button>
-          </li>
+            <div>
+              <button onClick={() => handleToggleCompleted(item)}><AiOutlineCheck color="#F4FFFD" /></button>
+              <button onClick={() => handleDeleteTodo(item) }><FaTrash color="#F4FFFD" /></button>
+
+            </div>
+          </ListItemTodo>
         )}
-      </ul>
-    </div>
+      </ListTodo>
+    </Container>
   )
 }
 
